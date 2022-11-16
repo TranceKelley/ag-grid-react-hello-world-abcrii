@@ -669,7 +669,7 @@ const App = () => {
 
 function MyRenderer(params) {
     return (
-        <span className="my-renderer ">
+        <span className="my-renderer">
             ...
             {params.value}
         </span>
@@ -681,7 +681,7 @@ function CustomStatsToolPanel(params) {
         <div className="my-stats">
             <h3>My day</h3>
             <h1>12 Open ROs</h1>
-            <p> <span>5</span> Not Dispatched</p>
+            <p> <span onClick={restoreFromHardCodedND}>6</span> Not Dispatched</p>
             <p> <span>5</span> In Process</p>
             <p> <span>5</span> Pre Invoice</p>
             <p> <span>5</span> Cashier</p>
@@ -689,7 +689,12 @@ function CustomStatsToolPanel(params) {
             <p> Customer Pay Total <b>$1,289.00</b></p>
             <h1>2 Warranty ROs to be closed</h1>
             <p> Comission Pay Total <b>$793.00</b></p>
-            <p> <span>See Warranty ROs</span></p>
+            <p> <button
+                        onClick={restoreFromHardCodedW}
+                        title="show all RO that have not been dispatched"
+                    >
+                        See All Warranty ROs
+                    </button></p>
 
             {params.value}
         </div>
@@ -759,7 +764,8 @@ const [columnDefs] = useState([
         cellStyle: { 
             align: 'center' 
         }, 
-        suppressMenu: true,
+        filter: 'agSetColumnFilter',
+        menuTabs: ['filterMenuTab']
     },    
     { field: 'TotalDue',
         cellStyle: { 
@@ -868,6 +874,26 @@ const clearFilters = useCallback(() => {
     };
     gridRef.current.api.setFilterModel(hardcodedFilter);
   }, []);
+
+  const restoreFromHardCodedW = useCallback(() => {
+    var hardcodedFilter = {
+        PayType: {
+        type: 'set',
+        values: ['W'],
+      }
+    };
+    gridRef.current.api.setFilterModel(hardcodedFilter);
+  }, []);
+
+  const restoreFromHardCodedMyROs = useCallback(() => {
+    var hardcodedFilter = {
+        Advisor: {
+        type: 'set',
+        values: ['Eric Sanders'],
+      }
+    };
+    gridRef.current.api.setFilterModel(hardcodedFilter);
+  }, []);
   
 
   return (
@@ -876,13 +902,19 @@ const clearFilters = useCallback(() => {
             <div>
                 <div className="button-group">
                 
-                <button
-                    onClick={restoreFromHardCodedND}
-                    title="show all RO that have not been dispatched"
-                >
-                    Not Dispatched
-                </button>
-                <button onClick={clearFilters}>Reset Filters</button>
+                    <button
+                        onClick={restoreFromHardCodedND}
+                        title="show all RO that have not been dispatched"
+                    >
+                        Not Dispatched
+                    </button>
+                    <button
+                        onClick={restoreFromHardCodedMyROs}
+                        title="show all RO that have not been dispatched"
+                    >
+                        My ROs
+                    </button>
+                    <button onClick={clearFilters}>Reset Filters</button>
                 
                 </div>
             </div>
