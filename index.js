@@ -701,11 +701,11 @@ function onFilterTextBoxChanged() {
       document.getElementById('filter-text-box').value
     );
 }
-
+const gridRef = useRef();
 
 const [columnDefs] = useState([
     { field: 'RONumber', 
-        cellStyle: { color: 'blue' },
+        cellStyle: { color: '#2B6BDD' },
         headerName: 'RO',
         pinned: 'left',
         maxWidth: 100,
@@ -785,7 +785,7 @@ const [columnDefs] = useState([
         cellRenderer: MyRenderer,
         cellStyle: { 
             textAlign:'center', 
-            color: 'blue', 
+            color: '#2B6BDD', 
             fontSize: '20px',
             cellPadding: '0'},
         filter: false,
@@ -843,20 +843,64 @@ const sideBar = {
 const gridOptions = {
     rowData: rowData,
 }
+
+const clearFilters = useCallback(() => {
+    gridRef.current.api.setFilterModel(null);
+  }, []);
+
+  const saveFilterModel = useCallback(() => {
+    savedFilterModel = gridRef.current.api.getFilterModel();
+    var keys = Object.keys(savedFilterModel);
+    var savedFilters = keys.length > 0 ? keys.join(', ') : '(none)';
+    document.querySelector('#savedFilters').innerHTML = savedFilters;
+  }, []);
+
+  const restoreFilterModel = useCallback(() => {
+    gridRef.current.api.setFilterModel(savedFilterModel);
+  }, []);
+
+  const restoreFromHardCodedND = useCallback(() => {
+    var hardcodedFilter = {
+      ROStatus: {
+        type: 'set',
+        values: ['Not Dispatched'],
+      }
+    };
+    gridRef.current.api.setFilterModel(hardcodedFilter);
+  }, []);
   
 
   return (
-    <div className="ag-theme-alpine" style={{ height: 1000 }}>
-      <AgGridReact
-      rowData={rowData}
-      columnDefs={columnDefs}
-      defaultColDef={defaultColDef}
-      enableRangeSelection={true}
-      rowSelection={'multiple'}
-      statusBar={statusBar}
-      sideBar={sideBar}
-      >
-      </AgGridReact>
+    <div style={containerStyle}>
+        <div className="example-wrapper">
+            <div>
+                <div className="button-group">
+                
+                <button
+                    onClick={restoreFromHardCodedND}
+                    title="show all RO that have not been dispatched"
+                >
+                    Not Dispatched
+                </button>
+                <button onClick={clearFilters}>Reset Filters</button>
+                
+                </div>
+            </div>
+        
+            <div className="ag-theme-alpine" style={{ height: 1000 }}>
+            <AgGridReact
+            ref={gridRef}
+            rowData={rowData}
+            columnDefs={columnDefs}
+            defaultColDef={defaultColDef}
+            enableRangeSelection={true}
+            rowSelection={'multiple'}
+            statusBar={statusBar}
+            sideBar={sideBar}
+            >
+            </AgGridReact>
+            </div>
+        </div>
     </div>
   );
 };
