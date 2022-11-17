@@ -741,8 +741,8 @@ const [columnDefs] = useState([
         suppressMenu: true, 
     },
     { field: 'Vehicle',
-    valueGetter: p => {
-        return p.data.Year + ' ' + p.data.Make + ' ' + p.data.Model ;
+        valueGetter: p => {
+            return p.data.Year + ' ' + p.data.Make + ' ' + p.data.Model ;
         },
     filter: 'agTextColumnFilter',
     menuTabs: ['filterMenuTab'] 
@@ -754,7 +754,8 @@ const [columnDefs] = useState([
     menuTabs: ['filterMenuTab'] 
     },
     { field: 'Model', 
-        hide:true },
+        hide:true 
+    },
     { field: 'HangTag', 
         headerName: 'Tag',
         resizable: false,
