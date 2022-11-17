@@ -1054,7 +1054,8 @@ const onFilterTextBoxChanged = useCallback(() => {
   }, []);
 
 
-const [columnDefs] = useState([
+  const createROColDefs = () => {
+    return [
     { field: 'RONumber', 
         cellStyle: { color: '#2B6BDD' },
         headerName: 'RO',
@@ -1138,6 +1139,7 @@ const [columnDefs] = useState([
     { field: 'AppointmentTime', hide:true },
     { field: 'AppointmentDate', hide:true },
     { field: 'ApppointmentStatus', hide:true },
+    { field: 'Payment Status', hide:true },
     { field: 'Actions', 
         headerName: '', 
         maxWidth: 52,
@@ -1155,7 +1157,89 @@ const [columnDefs] = useState([
         sortable: false,
         lockVisible: true
     }
-]);
+];};
+
+const AppointmentsView = () => {
+    return [
+        { field: 'AppointmentID', hide:false,
+        cellStyle: { color: '#2B6BDD' },
+        pinned: 'left',
+        maxWidth: 100,
+        minWidth: 100, 
+        lockPinned: true,
+        filter: 'agTextColumnFilter',
+        menuTabs: ['filterMenuTab']
+    },
+        { field: 'AppointmentTime', hide:false  },
+        { field: 'AppointmentDate', hide:false },
+        { field: 'TransportationType', hide:false },
+        { field: 'ApppointmentStatus', hide:false },
+        { field: 'Actions', 
+        headerName: '', 
+        maxWidth: 52,
+        minWidth: 52, 
+        pinned: 'right',
+        lockPinned: true,
+        cellRenderer: MyRenderer,
+        cellStyle: { 
+            textAlign:'center', 
+            color: '#2B6BDD', 
+            fontSize: '20px',
+            cellPadding: '0'},
+        filter: false,
+        suppressMenu: true,
+        sortable: false,
+        lockVisible: true
+    }
+    ];
+  };
+
+  const createCashierColDefs= () => {
+    return [
+        { field: 'RONumber', hide:false,
+        cellStyle: { color: '#2B6BDD' },
+        pinned: 'left',
+        maxWidth: 100,
+        minWidth: 100, 
+        lockPinned: true,
+        filter: 'agTextColumnFilter',
+        menuTabs: ['filterMenuTab']
+    },
+        { field: 'AppointmentTime', hide:false  },
+        { field: 'AppointmentDate', hide:false },
+        { field: 'TransportationType', hide:false },
+        { field: 'ApppointmentStatus', hide:false },
+        { field: 'Payment Status', hide:false },
+        { field: 'TotalDue',
+        cellStyle: { 
+            textAlign:'right', 
+            maxWidth: 83,
+            minWidth: 53,
+        },
+        filter: false,
+        suppressMenu: true,
+        sortable: false,
+        resizable: false,
+    },
+        { field: 'Actions', 
+        headerName: '', 
+        maxWidth: 52,
+        minWidth: 52, 
+        pinned: 'right',
+        lockPinned: true,
+        cellRenderer: MyRenderer,
+        cellStyle: { 
+            textAlign:'center', 
+            color: '#2B6BDD', 
+            fontSize: '20px',
+            cellPadding: '0'},
+        filter: false,
+        suppressMenu: true,
+        sortable: false,
+        lockVisible: true
+    }
+    ];
+  };
 
 const sideBar = {
     toolPanels: [
@@ -1255,7 +1339,22 @@ const clearFilters = useCallback(() => {
     };
     gridRef.current.api.setFilterModel(hardcodedFilter);
   }, []);
+
+
+
+  const onApptView = useCallback(() => {
+    gridRef.current.api.setColumnDefs(AppointmentsView());
+  }, []);
+
+  const onROView = useCallback(() => {
+    gridRef.current.api.setColumnDefs(createROColDefs());
+  }, []);
+
+  const onCashierView = useCallback(() => {
+    gridRef.current.api.setColumnDefs(createCashierColDefs());
+  }, []);
   
+  const [columnDefs, setColumnDefs] = useState(createROColDefs());
 
 
   return (
@@ -1275,6 +1374,24 @@ const clearFilters = useCallback(() => {
                         title="show all RO that have not been dispatched"
                     >
                         My Customer Pay ROs
+                    </button>
+                    <button
+                        onClick={onApptView }
+                        title="Appointments"
+                    >
+                        Appointments
+                    </button>
+                    <button
+                        onClick={onROView }
+                        title="Repair Orders"
+                    >
+                        Repair Orders
+                    </button>
+                    <button
+                        onClick={onCashierView }
+                        title="Cashier"
+                    >
+                        Cashier
                     </button>
                     <button onClick={clearFilters}>Reset Filters</button>
                     <input
