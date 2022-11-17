@@ -6,9 +6,10 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 
 const App = () => {
-  const containerStyle = useMemo(() => ({ width: '100%', height: '100%' }), []);
-  const gridStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
-  const [rowData] = useState([
+    const gridRef = useRef();
+    const containerStyle = useMemo(() => ({ width: '100%', height: '100%' }), []);
+    const gridStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
+    const [rowData] = useState([
     
     {
       "RONumber": "6478214",
@@ -701,12 +702,12 @@ function CustomStatsToolPanel(params) {
     );
 }
 
-function onFilterTextBoxChanged() {
-    gridOptions.api.setQuickFilter(
+const onFilterTextBoxChanged = useCallback(() => {
+    gridRef.current.api.setQuickFilter(
       document.getElementById('filter-text-box').value
     );
-}
-const gridRef = useRef();
+  }, []);
+
 
 const [columnDefs] = useState([
     { field: 'RONumber', 
@@ -890,6 +891,10 @@ const clearFilters = useCallback(() => {
         Advisor: {
         type: 'set',
         values: ['Eric Sanders'],
+      },
+      PayType: {
+        type: 'set',
+        values: ['C'],
       }
     };
     gridRef.current.api.setFilterModel(hardcodedFilter);
@@ -912,9 +917,15 @@ const clearFilters = useCallback(() => {
                         onClick={restoreFromHardCodedMyROs}
                         title="show all RO that have not been dispatched"
                     >
-                        My ROs
+                        My Customer Pay ROs
                     </button>
                     <button onClick={clearFilters}>Reset Filters</button>
+                    <input
+                        type="text"
+                        id="filter-text-box"
+                        placeholder="Search"
+                        onInput={onFilterTextBoxChanged}
+                    />
                 
                 </div>
             </div>
