@@ -738,16 +738,20 @@ const [columnDefs] = useState([
         headerName: 'Promised',
         maxWidth: 130, 
         minWidth: 130,
-        suppressMenu: true, },
-    { field: 'VIN', 
-        maxWidth: 200, 
-        minWidth: 200,
-        filter: 'agTextColumnFilter',
-        menuTabs: ['filterMenuTab'] 
+        suppressMenu: true, 
     },
     { field: 'Vehicle',
-        filter: 'agTextColumnFilter',
-        menuTabs: ['filterMenuTab'] 
+    valueGetter: p => {
+        return p.data.Year + ' ' + p.data.Make + ' ' + p.data.Model ;
+        },
+    filter: 'agTextColumnFilter',
+    menuTabs: ['filterMenuTab'] 
+    },
+    { field: 'VIN', 
+    maxWidth: 200, 
+    minWidth: 200,
+    filter: 'agTextColumnFilter',
+    menuTabs: ['filterMenuTab'] 
     },
     { field: 'Model', 
         hide:true },
@@ -797,7 +801,8 @@ const [columnDefs] = useState([
             cellPadding: '0'},
         filter: false,
         suppressMenu: true,
-        sortable: false
+        sortable: false,
+        lockVisible: true
     }
 ]);
 
@@ -900,6 +905,7 @@ const clearFilters = useCallback(() => {
     gridRef.current.api.setFilterModel(hardcodedFilter);
   }, []);
   
+
 
   return (
     <div style={containerStyle}>
