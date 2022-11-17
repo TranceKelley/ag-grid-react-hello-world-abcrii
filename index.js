@@ -5,6 +5,7 @@ import 'ag-grid-enterprise';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 import './style.css';
+//import { getData } from './data';
 
 const App = () => {
     const gridRef = useRef();
@@ -987,440 +988,439 @@ const App = () => {
             "PartsPerson": "Alex Flores",
             "TransportationType": "Waiter"
         },
-      ]);
+    ]);
 
-      const defaultColDef = useMemo(() => {
+    const defaultColDef = useMemo(() => {
         return {
-          flex: 1,
-          minWidth: 100,
-          filter: false,
-          resizable: true,
-          sortable: true,
-          enableValue: false,
-          enableRowGroup: false,
-          enablePivot: false,
-          
+            flex: 1,
+            minWidth: 100,
+            filter: false,
+            resizable: true,
+            sortable: true,
+            enableValue: false,
+            enableRowGroup: false,
+            enablePivot: false,
+            
         };
-      }, []);
-      const statusBar = useMemo(() => {
+    }, []);
+    const statusBar = useMemo(() => {
         return {
-          statusPanels: [
+            statusPanels: [
             { statusPanel: 'agTotalAndFilteredRowCountComponent', align: 'left' },
             { statusPanel: 'agTotalRowCountComponent', align: 'center' },
             { statusPanel: 'agFilteredRowCountComponent' },
             { statusPanel: 'agSelectedRowCountComponent' },
             { statusPanel: 'agAggregationComponent' },
-          ],
+            ],
         };
-      }, []);
+    }, []);
 
-function MyRenderer(params) {
-    return (
-        <span className="my-renderer">
-            ...
-            {params.value}
-        </span>
-    );
-}
+    function MyRenderer(params) {
+        return (
+            <span className="my-renderer">
+                ...
+                {params.value}
+            </span>
+        );
+    }
 
-function CustomStatsToolPanel(params) {
-    return (
-        <div className="my-stats">
-            <h3>My day</h3>
-            <h1>12 Open ROs</h1>
-            <p> <span onClick={restoreFromHardCodedND}>6</span> Not Dispatched</p>
-            <p> <span>5</span> In Process</p>
-            <p> <span>5</span> Pre Invoice</p>
-            <p> <span>5</span> Cashier</p>
-            <h1>5 Closed ROs</h1>
-            <p> Customer Pay Total <b>$1,289.00</b></p>
-            <h1>2 Warranty ROs to be closed</h1>
-            <p> Comission Pay Total <b>$793.00</b></p>
-            <p> <button
+    function CustomStatsToolPanel(params) {
+        return (
+            <div className="my-stats">
+                <h3>My day</h3>
+                <h1>12 Open ROs</h1>
+                <p> <span onClick={restoreFromHardCodedND}>6</span> Not Dispatched</p>
+                <p> <span>5</span> In Process</p>
+                <p> <span>5</span> Pre Invoice</p>
+                <p> <span>5</span> Cashier</p>
+                <h1>5 Closed ROs</h1>
+                <p> Customer Pay Total <b>$1,289.00</b></p>
+                <h1>2 Warranty ROs to be closed</h1>
+                <p> Comission Pay Total <b>$793.00</b></p>
+                <p> <button
                         onClick={restoreFromHardCodedW}
                         title="show all RO that have not been dispatched"
                     >
                         See All Warranty ROs
-                    </button></p>
+                    </button>
+                </p>
 
-            {params.value}
-        </div>
-    );
-}
+                {params.value}
+            </div>
+        );
+    }
 
-const onFilterTextBoxChanged = useCallback(() => {
-    gridRef.current.api.setQuickFilter(
-      document.getElementById('filter-text-box').value
-    );
-  }, []);
+    const onFilterTextBoxChanged = useCallback(() => {
+        gridRef.current.api.setQuickFilter(
+        document.getElementById('filter-text-box').value
+        );
+    }, []);
 
 
   const createROColDefs = () => {
-    return [
-    { field: 'RONumber', 
-        cellStyle: { color: '#2B6BDD' },
-        headerName: 'RO',
-        pinned: 'left',
-        maxWidth: 100,
-        minWidth: 100, 
-        lockPinned: true,
-        filter: 'agTextColumnFilter',
-        menuTabs: ['filterMenuTab']
-    },
-    { field: 'ROStatus', 
-        headerName: 'Status', 
-        filter: 'agSetColumnFilter',
-        menuTabs: ['filterMenuTab']
-    },
-    { field: 'CustomerName', 
-        headerName: 'Customer', 
+        return [
+        { field: 'RONumber', 
+            cellStyle: { color: '#2B6BDD' },
+            headerName: 'RO',
+            pinned: 'left',
+            maxWidth: 100,
+            minWidth: 100, 
+            lockPinned: true,
+            filter: 'agTextColumnFilter',
+            menuTabs: ['filterMenuTab']
+        },
+        { field: 'ROStatus', 
+            headerName: 'Status', 
+            filter: 'agSetColumnFilter',
+            menuTabs: ['filterMenuTab']
+        },
+        { field: 'CustomerName', 
+            headerName: 'Customer', 
+            filter: 'agTextColumnFilter',
+            menuTabs: ['filterMenuTab'] 
+        },
+        { field: 'Advisor', 
+            filter: 'agSetColumnFilter', 
+            menuTabs: ['filterMenuTab']
+        },
+        { field: 'PromisedTime', 
+            headerName: 'Promised',
+            maxWidth: 130, 
+            minWidth: 130,
+            suppressMenu: true, 
+        },
+        { field: 'Vehicle',
+            valueGetter: p => {
+                return p.data.Year + ' ' + p.data.Make + ' ' + p.data.Model ;
+            },
         filter: 'agTextColumnFilter',
         menuTabs: ['filterMenuTab'] 
-    },
-    { field: 'Advisor', 
-        filter: 'agSetColumnFilter', 
-        menuTabs: ['filterMenuTab']
-    },
-    { field: 'PromisedTime', 
-        headerName: 'Promised',
-        maxWidth: 130, 
-        minWidth: 130,
-        suppressMenu: true, 
-    },
-    { field: 'Vehicle',
-        valueGetter: p => {
-            return p.data.Year + ' ' + p.data.Make + ' ' + p.data.Model ;
         },
-    filter: 'agTextColumnFilter',
-    menuTabs: ['filterMenuTab'] 
-    },
-    { field: 'VIN', 
-    maxWidth: 200, 
-    minWidth: 200,
-    filter: 'agTextColumnFilter',
-    menuTabs: ['filterMenuTab'] 
-    },
-    { field: 'Model', 
-        hide:true 
-    },
-    { field: 'HangTag', 
-        headerName: 'Tag',
-        resizable: false,
-        maxWidth: 80, 
+        { field: 'VIN', 
+        maxWidth: 200, 
+        minWidth: 200,
         filter: 'agTextColumnFilter',
         menuTabs: ['filterMenuTab'] 
-    },
-    { field: 'PayType', 
-        headerName: 'Pay',
-        resizable: false, 
-        maxWidth: 60, 
-        cellStyle: { 
-            align: 'center' 
-        }, 
-        filter: 'agSetColumnFilter',
-        menuTabs: ['filterMenuTab']
-    },    
-    { field: 'TotalDue',
-        cellStyle: { 
-            textAlign:'right', 
-            maxWidth: 83,
-            minWidth: 53,
         },
-        filter: false,
-        suppressMenu: true,
-        sortable: false,
-        resizable: false,
-    },
-    { field: 'Tech', hide:true },
-    { field: 'TechStatus', hide:true },
-    { field: 'PartsPerson', hide:true },
-    { field: 'PartsStatus', hide:true },
-    { field: 'TransportationType', hide:true },
-    { field: 'AppointmentID', hide:true },
-    { field: 'AppointmentTime', hide:true },
-    { field: 'AppointmentDate', hide:true },
-    { field: 'ApppointmentStatus', hide:true },
-    { field: 'Payment Status', hide:true },
-    { field: 'Actions', 
-        headerName: '', 
-        maxWidth: 52,
-        minWidth: 52, 
-        pinned: 'right',
-        lockPinned: true,
-        cellRenderer: MyRenderer,
-        cellStyle: { 
-            textAlign:'center', 
-            color: '#2B6BDD', 
-            fontSize: '20px',
-            cellPadding: '0'},
-        filter: false,
-        suppressMenu: true,
-        sortable: false,
-        lockVisible: true
-    }
-];};
-
-const AppointmentsView = () => {
-    return [
-        { field: 'AppointmentID', hide:false,
-        cellStyle: { color: '#2B6BDD' },
-        pinned: 'left',
-        maxWidth: 100,
-        minWidth: 100, 
-        lockPinned: true,
-        filter: 'agTextColumnFilter',
-        menuTabs: ['filterMenuTab']
-    },
-        { field: 'AppointmentTime', hide:false  },
-        { field: 'AppointmentDate', hide:false },
-        { field: 'TransportationType', hide:false },
-        { field: 'ApppointmentStatus', hide:false },
-        { field: 'Actions', 
-        headerName: '', 
-        maxWidth: 52,
-        minWidth: 52, 
-        pinned: 'right',
-        lockPinned: true,
-        cellRenderer: MyRenderer,
-        cellStyle: { 
-            textAlign:'center', 
-            color: '#2B6BDD', 
-            fontSize: '20px',
-            cellPadding: '0'},
-        filter: false,
-        suppressMenu: true,
-        sortable: false,
-        lockVisible: true
-    }
-    ];
-  };
-
-  const createCashierColDefs= () => {
-    return [
-        { field: 'RONumber', hide:false,
-        cellStyle: { color: '#2B6BDD' },
-        pinned: 'left',
-        maxWidth: 100,
-        minWidth: 100, 
-        lockPinned: true,
-        filter: 'agTextColumnFilter',
-        menuTabs: ['filterMenuTab']
-    },
-        { field: 'AppointmentTime', hide:false  },
-        { field: 'AppointmentDate', hide:false },
-        { field: 'TransportationType', hide:false },
-        { field: 'ApppointmentStatus', hide:false },
-        { field: 'Payment Status', hide:false },
+        { field: 'Model', 
+            hide:true 
+        },
+        { field: 'HangTag', 
+            headerName: 'Tag',
+            resizable: false,
+            maxWidth: 80, 
+            filter: 'agTextColumnFilter',
+            menuTabs: ['filterMenuTab'] 
+        },
+        { field: 'PayType', 
+            headerName: 'Pay',
+            resizable: false, 
+            maxWidth: 60, 
+            cellStyle: { 
+                align: 'center' 
+            }, 
+            filter: 'agSetColumnFilter',
+            menuTabs: ['filterMenuTab']
+        },    
         { field: 'TotalDue',
-        cellStyle: { 
-            textAlign:'right', 
-            maxWidth: 83,
-            minWidth: 53,
+            cellStyle: { 
+                textAlign:'right', 
+                maxWidth: 83,
+                minWidth: 53,
+            },
+            filter: false,
+            suppressMenu: true,
+            sortable: false,
+            resizable: false,
         },
-        filter: false,
-        suppressMenu: true,
-        sortable: false,
-        resizable: false,
-    },
+        { field: 'Tech', hide:true },
+        { field: 'TechStatus', hide:true },
+        { field: 'PartsPerson', hide:true },
+        { field: 'PartsStatus', hide:true },
+        { field: 'TransportationType', hide:true },
+        { field: 'AppointmentID', hide:true },
+        { field: 'AppointmentTime', hide:true },
+        { field: 'AppointmentDate', hide:true },
+        { field: 'ApppointmentStatus', hide:true },
+        { field: 'Payment Status', hide:true },
         { field: 'Actions', 
-        headerName: '', 
-        maxWidth: 52,
-        minWidth: 52, 
-        pinned: 'right',
-        lockPinned: true,
-        cellRenderer: MyRenderer,
-        cellStyle: { 
-            textAlign:'center', 
-            color: '#2B6BDD', 
-            fontSize: '20px',
-            cellPadding: '0'},
-        filter: false,
-        suppressMenu: true,
-        sortable: false,
-        lockVisible: true
-    }
-    ];
-  };
+            headerName: '', 
+            maxWidth: 52,
+            minWidth: 52, 
+            pinned: 'right',
+            lockPinned: true,
+            cellRenderer: MyRenderer,
+            cellStyle: { 
+                textAlign:'center', 
+                color: '#2B6BDD', 
+                fontSize: '20px',
+                cellPadding: '0'},
+            filter: false,
+            suppressMenu: true,
+            sortable: false,
+            lockVisible: true
+        }
+    ];};
 
-const sideBar = {
-    toolPanels: [
-    {
-        id: 'customStats',
-        labelDefault: 'May Day',
-        labelKey: 'customStats',
-        iconKey: 'chart',
-        toolPanel: CustomStatsToolPanel,
-        minWidth: 180,
-        maxWidth: 400,
-        width: 250
-    },
-    {
-        id: 'columns',
-        labelDefault: 'Columns',
-        labelKey: 'columns',
-        iconKey: 'columns',
-        toolPanel: 'agColumnsToolPanel',
-        toolPanelParams: {
-            suppressRowGroups: true,
-            suppressValues: true,
-            suppressPivots: true,
-            suppressPivotMode: true,
-            suppressColumnFilter: true,
-            suppressColumnSelectAll: true,
-            suppressColumnExpandAll: true,
-          },
-        minWidth: 180,
-        maxWidth: 400,
-        width: 250
-    },
-    {
-        id: 'filters',
-        labelDefault: 'Filters',
-        labelKey: 'filters',
-        iconKey: 'filter',
-        toolPanel: 'agFiltersToolPanel',
-        minWidth: 180,
-        maxWidth: 400,
-        width: 250
-    }
-],
-    position: 'left',
-    defaultToolPanel: 'customStats'
-},
-
-const gridOptions = {
-    rowData: rowData,
-}
-
-const clearFilters = useCallback(() => {
-    gridRef.current.api.setFilterModel(null);
-  }, []);
-
-  const saveFilterModel = useCallback(() => {
-    savedFilterModel = gridRef.current.api.getFilterModel();
-    var keys = Object.keys(savedFilterModel);
-    var savedFilters = keys.length > 0 ? keys.join(', ') : '(none)';
-    document.querySelector('#savedFilters').innerHTML = savedFilters;
-  }, []);
-
-  const restoreFilterModel = useCallback(() => {
-    gridRef.current.api.setFilterModel(savedFilterModel);
-  }, []);
-
-  const restoreFromHardCodedND = useCallback(() => {
-    var hardcodedFilter = {
-      ROStatus: {
-        type: 'set',
-        values: ['Not Dispatched'],
-      }
+    const AppointmentsView = () => {
+        return [
+            { field: 'AppointmentID', hide:false,
+                cellStyle: { color: '#2B6BDD' },
+                pinned: 'left',
+                maxWidth: 100,
+                minWidth: 100, 
+                lockPinned: true,
+                filter: 'agTextColumnFilter',
+                menuTabs: ['filterMenuTab']
+            },
+            { field: 'AppointmentTime', hide:false  },
+            { field: 'AppointmentDate', hide:false },
+            { field: 'TransportationType', hide:false },
+            { field: 'ApppointmentStatus', hide:false },
+            { field: 'Actions', 
+                headerName: '', 
+                maxWidth: 52,
+                minWidth: 52, 
+                pinned: 'right',
+                lockPinned: true,
+                cellRenderer: MyRenderer,
+                cellStyle: { 
+                    textAlign:'center', 
+                    color: '#2B6BDD', 
+                    fontSize: '20px',
+                    cellPadding: '0'},
+                filter: false,
+                suppressMenu: true,
+                sortable: false,
+                lockVisible: true
+            }
+        ];
     };
-    gridRef.current.api.setFilterModel(hardcodedFilter);
-  }, []);
 
-  const restoreFromHardCodedW = useCallback(() => {
-    var hardcodedFilter = {
+    const createCashierColDefs= () => {
+        return [
+            { field: 'RONumber', 
+                hide:false,
+                cellStyle: { color: '#2B6BDD' },
+                pinned: 'left',
+                maxWidth: 100,
+                minWidth: 100, 
+                lockPinned: true,
+                filter: 'agTextColumnFilter',
+                menuTabs: ['filterMenuTab']
+            },
+            { field: 'AppointmentTime', hide:false  },
+            { field: 'AppointmentDate', hide:false },
+            { field: 'TransportationType', hide:false },
+            { field: 'ApppointmentStatus', hide:false },
+            { field: 'Payment Status', hide:false },
+            { field: 'TotalDue',
+                cellStyle: { 
+                    textAlign:'right', 
+                    maxWidth: 83,
+                    minWidth: 53,
+                },
+                filter: false,
+                suppressMenu: true,
+                sortable: false,
+                resizable: false,
+            },
+            {   field: 'Actions', 
+                headerName: '', 
+                maxWidth: 52,
+                minWidth: 52, 
+                pinned: 'right',
+                lockPinned: true,
+                cellRenderer: MyRenderer,
+                cellStyle: { 
+                    textAlign:'center', 
+                    color: '#2B6BDD', 
+                    fontSize: '20px',
+                    cellPadding: '0'},
+                filter: false,
+                suppressMenu: true,
+                sortable: false,
+                lockVisible: true
+            }
+        ];
+    };
+
+    const sideBar = {
+        toolPanels: [
+        {   id: 'customStats',
+            labelDefault: 'May Day',
+            labelKey: 'customStats',
+            iconKey: 'chart',
+            toolPanel: CustomStatsToolPanel,
+            minWidth: 180,
+            maxWidth: 400,
+            width: 250
+        },
+        {   id: 'columns',
+            labelDefault: 'Columns',
+            labelKey: 'columns',
+            iconKey: 'columns',
+            toolPanel: 'agColumnsToolPanel',
+            toolPanelParams: {
+                suppressRowGroups: true,
+                suppressValues: true,
+                suppressPivots: true,
+                suppressPivotMode: true,
+                suppressColumnFilter: true,
+                suppressColumnSelectAll: true,
+                suppressColumnExpandAll: true,
+            },
+            minWidth: 180,
+            maxWidth: 400,
+            width: 250
+        },
+        {
+            id: 'filters',
+            labelDefault: 'Filters',
+            labelKey: 'filters',
+            iconKey: 'filter',
+            toolPanel: 'agFiltersToolPanel',
+            minWidth: 180,
+            maxWidth: 400,
+            width: 250
+        }],
+        position: 'left',
+        defaultToolPanel: 'customStats'
+    },
+
+    const gridOptions = {
+        rowData: rowData,
+    }
+
+    const clearFilters = useCallback(() => {
+        gridRef.current.api.setFilterModel(null);
+    }, []);
+
+    const saveFilterModel = useCallback(() => {
+        savedFilterModel = gridRef.current.api.getFilterModel();
+        var keys = Object.keys(savedFilterModel);
+        var savedFilters = keys.length > 0 ? keys.join(', ') : '(none)';
+        document.querySelector('#savedFilters').innerHTML = savedFilters;
+    }, []);
+
+    const restoreFilterModel = useCallback(() => {
+        gridRef.current.api.setFilterModel(savedFilterModel);
+    }, []);
+
+    const restoreFromHardCodedND = useCallback(() => {
+        var hardcodedFilter = {
+        ROStatus: {
+            type: 'set',
+            values: ['Not Dispatched'],
+        }
+        };
+        gridRef.current.api.setFilterModel(hardcodedFilter);
+    }, []);
+
+    const restoreFromHardCodedW = useCallback(() => {
+        var hardcodedFilter = {
+            PayType: {
+            type: 'set',
+            values: ['W'],
+        }
+        };
+        gridRef.current.api.setFilterModel(hardcodedFilter);
+    }, []);
+
+    const restoreFromHardCodedMyROs = useCallback(() => {
+        var hardcodedFilter = {
+            Advisor: {
+            type: 'set',
+            values: ['Eric Sanders'],
+        },
         PayType: {
-        type: 'set',
-        values: ['W'],
-      }
-    };
-    gridRef.current.api.setFilterModel(hardcodedFilter);
-  }, []);
-
-  const restoreFromHardCodedMyROs = useCallback(() => {
-    var hardcodedFilter = {
-        Advisor: {
-        type: 'set',
-        values: ['Eric Sanders'],
-      },
-      PayType: {
-        type: 'set',
-        values: ['C'],
-      }
-    };
-    gridRef.current.api.setFilterModel(hardcodedFilter);
-  }, []);
+            type: 'set',
+            values: ['C'],
+        }
+        };
+        gridRef.current.api.setFilterModel(hardcodedFilter);
+    }, []);
 
 
 
-  const onApptView = useCallback(() => {
-    gridRef.current.api.setColumnDefs(AppointmentsView());
-  }, []);
+    const onApptView = useCallback(() => {
+        gridRef.current.api.setColumnDefs(AppointmentsView());
+    }, []);
 
-  const onROView = useCallback(() => {
-    gridRef.current.api.setColumnDefs(createROColDefs());
-  }, []);
+    const onROView = useCallback(() => {
+        gridRef.current.api.setColumnDefs(createROColDefs());
+    }, []);
 
-  const onCashierView = useCallback(() => {
-    gridRef.current.api.setColumnDefs(createCashierColDefs());
-  }, []);
-  
-  const [columnDefs, setColumnDefs] = useState(createROColDefs());
+    const onCashierView = useCallback(() => {
+        gridRef.current.api.setColumnDefs(createCashierColDefs());
+    }, []);
+    
+    const [columnDefs, setColumnDefs] = useState(createROColDefs());
 
 
-  return (
-    <div style={containerStyle}>
-        <div className="example-wrapper">
-            <div>
-                <div className="button-group">
-                
-                    <button
-                        onClick={restoreFromHardCodedND}
-                        title="show all RO that have not been dispatched"
-                    >
-                        Not Dispatched
-                    </button>
-                    <button
-                        onClick={restoreFromHardCodedMyROs}
-                        title="show all RO that have not been dispatched"
-                    >
-                        My Customer Pay ROs
-                    </button>
-                    <button
-                        onClick={onApptView }
-                        title="Appointments"
-                    >
-                        Appointments
-                    </button>
-                    <button
-                        onClick={onROView }
-                        title="Repair Orders"
-                    >
-                        Repair Orders
-                    </button>
-                    <button
-                        onClick={onCashierView }
-                        title="Cashier"
-                    >
-                        Cashier
-                    </button>
-                    <button onClick={clearFilters}>Reset Filters</button>
-                    <input
-                        type="text"
-                        id="filter-text-box"
-                        placeholder="Search"
-                        onInput={onFilterTextBoxChanged}
-                    />
-                
+    return (
+        <div style={containerStyle}>
+            <div className="example-wrapper">
+                <div>
+                    <div className="button-group">
+                    
+                        <button
+                            onClick={restoreFromHardCodedND}
+                            title="show all RO that have not been dispatched"
+                        >
+                            Not Dispatched
+                        </button>
+                        <button
+                            onClick={restoreFromHardCodedMyROs}
+                            title="show all RO that have not been dispatched"
+                        >
+                            My Customer Pay ROs
+                        </button>
+                        <button
+                            onClick={onApptView }
+                            title="Appointments"
+                        >
+                            Appointments
+                        </button>
+                        <button
+                            onClick={onROView }
+                            title="Repair Orders"
+                        >
+                            Repair Orders
+                        </button>
+                        <button
+                            onClick={onCashierView }
+                            title="Cashier"
+                        >
+                            Cashier
+                        </button>
+                        <button onClick={clearFilters}>Reset Filters</button>
+                        <input
+                            type="text"
+                            id="filter-text-box"
+                            placeholder="Search"
+                            onInput={onFilterTextBoxChanged}
+                        />
+                    
+                    </div>
+                </div>
+            
+                <div className="ag-theme-alpine" style={{ height: 800 }}>
+                <AgGridReact
+                ref={gridRef}
+                rowData={rowData}
+                columnDefs={columnDefs}
+                defaultColDef={defaultColDef}
+                enableRangeSelection={true}
+                rowSelection={'multiple'}
+                //statusBar={statusBar}
+                sideBar={sideBar}
+                >
+                </AgGridReact>
                 </div>
             </div>
-        
-            <div className="ag-theme-alpine" style={{ height: 800 }}>
-            <AgGridReact
-            ref={gridRef}
-            rowData={rowData}
-            columnDefs={columnDefs}
-            defaultColDef={defaultColDef}
-            enableRangeSelection={true}
-            rowSelection={'multiple'}
-            //statusBar={statusBar}
-            sideBar={sideBar}
-            >
-            </AgGridReact>
-            </div>
         </div>
-    </div>
-  );
+    );
 };
 
 render(<App />, document.getElementById('root'));
