@@ -4,6 +4,7 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-enterprise';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+import './style.css';
 
 const App = () => {
     const gridRef = useRef();
@@ -1404,7 +1405,7 @@ const clearFilters = useCallback(() => {
                 </div>
             </div>
         
-            <div className="ag-theme-alpine" style={{ height: 1000 }}>
+            <div className="ag-theme-alpine" style={{ height: 800 }}>
             <AgGridReact
             ref={gridRef}
             rowData={rowData}
@@ -1412,7 +1413,7 @@ const clearFilters = useCallback(() => {
             defaultColDef={defaultColDef}
             enableRangeSelection={true}
             rowSelection={'multiple'}
-            statusBar={statusBar}
+            //statusBar={statusBar}
             sideBar={sideBar}
             >
             </AgGridReact>
